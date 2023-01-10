@@ -1,10 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>save</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-$END$
+<div>
+  <form action="/member/save" method="post" enctype="multipart/form-data" name="memberSaveForm" id="memberSaveForm">
+    이메일<br>
+    <input type="text" id="memberEmail" name="memberEmail" onblur="dupEmail()"><br>
+    <samp id="outputEmail" name="sampValue" value="false"></samp>
+    <br>
+
+    비밀번호<br>
+    <input type="password" name="memberPassword" id="memberPassword"><br>
+    <samp type="text" name="sampValue" id="outputPw" value="false"></samp><br>
+    비밀번호 재입력<br>
+    <input type="password" id="passwordCheck" name="sampValue" onblur="pwCheck()" onkeydown="regPassword()"><br>
+
+    <samp type="text" name="sampValue" id="outputPwCheck" value="false"></samp> <br>
+
+    이름<br>
+    <input type="text" name="memberName" id="memberName" onblur="nameCheck()"><br>
+    <samp name="sampValue" id="outputName" value="false"></samp> <br>
+    닉네임<br>
+    <input type="text" name="memberNickname" id="memberNickname" onblur="dupNickname()"><br>
+    <samp name="sampValue" id="outputNickname" value="false"></samp><br>
+    전화번호<br>
+    <input type="text" name="memberMobile" id="memberMobile" placeholder="'-'기호 입력 불가" onblur="regMobile()"><br>
+    <samp name="sampValue" id="outputMobile" value="false"></samp><br>
+    성별<br>
+
+
+    <select name="gender">
+      <option value="none">선택 안함</option>
+      <option value="man">남성</option>
+      <option value="woman">여성</option>
+    </select>
+    <input type="file" name="memberFile"><br>
+    <input type="button" value="확인" onclick="member()">
+
+  </form>
+</div>
+<script th:inline="javascript">
+
+
+  const dupNickname = () => {
+    const inputNickname = document.getElementById("memberNickname").value;
+    const outputNickname = document.getElementById("outputNickname");
+    if (inputNickname) {
+      axios({
+        method: "post",
+        url: "/member/dupNickname",
+        params: {
+          inputNickname: inputNickname
+        }
+      }).then(res => {
+        outputNickname.innerHTML = "사용가능!";
+        outputNickname.style.color = "green";
+        outputNickname.value = "true";
+
+      }).catch(res => {
+        outputNickname.innerHTML = "사용불가!";
+        outputNickname.style.color = "red";
+
+      })
+
+    } else {
+      outputNickname.innerHTML = "공백 사용 불가!";
+      outputNickname.style.color = "red";
+
+
+    }
+  }
+
+
+  const pwCheck = () => {
+    const memberPassword = document.getElementById("memberPassword").value;
+    const passwordCheck = document.getElementById("passwordCheck").value;
+    const outputPw = document.getElementById("outputPwCheck");
+    const pwValue = document.getElementById("outputPw").value;
+    if (memberPassword && passwordCheck && pwValue) {
+      if (memberPassword == passwordCheck) {
+        outputPw.innerHTML = "사용가능!";
+        outputPw.style.color = "green";
+        outputPw.value = "true";
+      } else {
+        outputPw.innerHTML = "불일치";
+        outputPw.style.color = "red";
+      }
+    } else {
+      outputPw.innerHTML = "다시 입력!";
+      outputPw.style.color = "red";
+
+    }
+
+
+  }
+  const dupEmail = () => {
+    const reg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const memberEmail = document.getElementById("memberEmail").value;
+    const outputEmail = document.getElementById("outputEmail");
+    if (memberEmail) {
+      if (memberEmail.match(reg) != null) {
+        axios({
+          method: "post",
+          url: "/member/dupEmail",
+          params: {
+            inputEmail: memberEmail
+          }
+
+        }).then(res => {
+          outputEmail.innerHTML = "사용가능!";
+          outputEmail.style.color = "green";
+          outputEmail.value = "true";
+
+        }).catch(res => {
+          outputEmail.innerHTML = "사용불가!";
+          outputEmail.style.color = "red";
+
+        })
+
+
+      } else {
+        outputEmail.innerHTML = "이메일 다시 확인!";
+        outputEmail.style.color = "red";
+      }
+    } else {
+      outputEmail.innerHTML = "이메일 입력 해주세요!";
+      outputEmail.style.color = "red";
+
+    }
+
+
+  }
+  const regPassword = () => {
+    const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*()+|=]{8,20}$/i;
+    const inputPassword = document.getElementById("memberPassword").value;
+    const outputPassword = document.getElementById("outputPw");
+    if (inputPassword) {
+      if (inputPassword.match(reg) != null) {
+        outputPassword.innerHTML = "사용 가능!"
+        outputPassword.style.color = "green";
+        outputPassword.value = "true";
+      } else {
+        outputPassword.innerHTML = "8자 이상 숫자를 포함!";
+        outputPassword.style.color = "red";
+
+
+      }
+    } else {
+      outputPassword.innerHTML = "비밀번호 입력!";
+      outputPassword.style.color = "red";
+
+
+    }
+  }
+  const regMobile = () => {
+    const reg = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
+    const memberMobile = document.getElementById("memberMobile").value;
+    const outputMobile = document.getElementById("outputMobile");
+    if (memberMobile) {
+      if (memberMobile.match(reg) != null) {
+        outputMobile.innerHTML = "사용 가능!";
+        outputMobile.style.color = "green";
+        outputMobile.value = "true";
+      } else {
+        outputMobile.innerHTML = "다시 확인!";
+        outputMobile.style.color = "red";
+      }
+
+    } else {
+      outputMobile.innerHTML = "필수 입력 입니다!";
+      outputMobile.style.color = "red";
+    }
+  }
+  const member = () => {
+    const memberEmail = document.getElementById("outputEmail").value;
+    const memberPassword = document.getElementById("outputPw").value;
+    const memberPasswordCheck = document.getElementById("outputPwCheck").value;
+    const memberName = document.getElementById("outputName").value;
+    const memberNickname = document.getElementById("outputNickname").value;
+    const memberMobile = document.getElementById("outputMobile").value;
+    console.log(memberEmail + memberPassword + memberName + memberNickname + memberMobile);
+    if (memberEmail && memberPassword && memberName && memberPasswordCheck &&
+            memberNickname && memberMobile == "true") {
+      document.memberSaveForm.submit();
+    } else {
+      alert("다시 확인");
+    }
+
+
+  }
+  const nameCheck = () => {
+    const inputName = document.getElementById("memberName").value;
+    const outputName = document.getElementById("outputName");
+    if (inputName) {
+      outputName.innerHTML = "멋진 이름!";
+      outputName.style.color = "green";
+      outputName.value = "true";
+    } else {
+      outputName.innerHTML = "필수 입력!";
+      outputName.style.color = "red";
+    }
+
+  }
+
+</script>
 </body>
 </html>

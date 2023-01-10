@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+<form  method="post" name="loginForm" id="loginForm" action="/member/login" >
+    <input type="text" name="memberEmail" id="memberEmail" placeholder="이메일"><br>
+    <input type="password" name="memberPassword" id="memberPassword" placeholder="비밀번호" ><br>
+</form>
+<samp name="loginInner" id="loginInner"></samp><br>
+<samp id="loginError"></samp><br>
+<button onclick="nullCheck()">login</button>
+
+<script th:inline="javascript">
+    const nullCheck = () =>{
+        const inputEmail = document.getElementById("memberEmail");
+        const inputPassword = document.getElementById("memberPassword");
+        const loginError = document.getElementById("loginError");
+        if(inputEmail.value.length == 0){
+            inputEmail.focus();
+            loginError.innerText = "아이디 입력!";
+            loginError.style.color = "red";
+        }else if((inputPassword.value.length ==0)){
+            inputPassword.focus();
+            loginError.innerText = "비밀번호 입력";
+            loginError.style.color="red";
+        }else{
+            document.loginForm.submit();
+        }
+    }
+
+
+
+</script>
 </body>
 </html>
