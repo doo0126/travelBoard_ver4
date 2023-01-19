@@ -20,7 +20,7 @@ spring:
     open-in-view: false
     hibernate:
       # spring.jpa.hibernate.ddl-auto=create
-      ddl-auto: create
+      ddl-auto: update
 
 # db query log 관련 설정
 logging:

@@ -13,6 +13,8 @@
 <samp name="loginInner" id="loginInner"></samp><br>
 <samp id="loginError"></samp><br>
 <button onclick="nullCheck()">login</button>
+<a href="/member/saveForm">회원가입</a>
+<button onclick="home()">home</button>
 
 <script th:inline="javascript">
     const nullCheck = () =>{
@@ -27,9 +29,15 @@
             inputPassword.focus();
             loginError.innerText = "비밀번호 입력";
             loginError.style.color="red";
-        }else{
+
+        }else if(inputEmail.value.length> 0 && inputPassword.value.length > 0){
+            console.log("로그인 호출")
             document.loginForm.submit();
+
         }
+    }
+    const home = () =>{
+        location.href="/";
     }
 
 
