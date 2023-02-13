@@ -37,13 +37,19 @@ private final BoardService boardService;
     }
 
 
+
     @GetMapping("/updateForm/{id}")
-    public String updateForm(@PathVariable Long id , Model  model){
-        System.out.printf("updateForm",id);
-         BoardDTO boardDTO = boardService.detail(id);
-        model.addAttribute("boardDTO" , boardDTO);
+    public  String updateForm (@PathVariable Long id , Model model) {
+         BoardDTO boardDTO=boardService.findAllById(id);
+         System.out.printf("boarDTO\n",boardDTO);
+         model.addAttribute("boardDTO" ,boardDTO);
+
         return "boardPages/update";
 
+    }
+    @GetMapping("/filtering")
+    public String filteringForm(){
+        return "filteringPages/save";
     }
 
     //-----------------------------logic--------------------------------
@@ -71,41 +77,44 @@ private final BoardService boardService;
 
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable Long id , Model model){
-        BoardDTO boardDTO = boardService.detail(id);
+        BoardDTO boardDTO = boardService.findAllById(id);
         model.addAttribute(boardDTO);
         return "boardPages/detail";
 
     }
     @PostMapping("/save")
     public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
+        System.out.printf("saveController:%s",boardDTO);
         boardService.save(boardDTO);
 
 
 
         return "redirect:/board/list";
     }
-    @GetMapping("/delete/{id}")
-public String delete(@PathVariable Long id ){
-        System.out.printf("deleteService");
-        boardService.delete(id);
+    @PostMapping("/update")
+    public String update(@ModelAttribute BoardDTO boardDTO ){
+        boardService.update(boardDTO);
+
         return "redirect:/board/list";
-
     }
+    @PostMapping("/delete/{id}")
+    public String delete (@PathVariable Long id ){
+        boardService.delete(id);
+                return "redirect:/board/list";
+    }
+//    @GetMapping("/search")
+//    public String search(@RequestParam("req") String req , @RequestParam("type") int type , Model model){
+//        List<BoardDTO> resultList = boardService.search(req , type);
+//            model.addAttribute("boardList" , resultList);
+//        return "boardPages/list";
+//
+//
+//    }
 
-        @PostMapping("/passwordAxios")
-    public ResponseEntity passwordAxios(@RequestParam("id") Long id , HttpSession session) {
-        System.out.printf("boardAxios:%s\n", id);
-        String memberEmail=(String)session.getAttribute("memberSession");
-        boolean result = boardService.passwordAxios(id , memberEmail );
 
-        if(result){
-            return new ResponseEntity("사용가능" , HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity("사용 불가" , HttpStatus.CONFLICT);
-        }
 
-        }
+
+
 
 
 }

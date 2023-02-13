@@ -20,16 +20,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 
 public class BoardService {
     @Autowired
-    private  BoardRepository boardRepository;
+    private BoardRepository boardRepository;
     @Autowired
-    private  MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     @Autowired
-    private  BoardFileRepository boardFileRepository;
+    private BoardFileRepository boardFileRepository;
 
     public BoardService(BoardRepository boardRepository,
                         MemberRepository memberRepository) {
@@ -47,6 +50,7 @@ public class BoardService {
                         board.getBoardTitle(),
                         board.getBoardContents(),
                         board.getBoardWriter()
+
                 )
         );
         return boardList;
@@ -58,9 +62,9 @@ public class BoardService {
     //아직 안만듬
     @Transactional
     public BoardDTO detail(Long id) {
-    BoardEntity boardEntity = boardRepository.findById(id).get();
+        BoardEntity boardEntity = boardRepository.findById(id).get();
 
-    return  BoardDTO.toDTO(boardEntity);
+        return BoardDTO.toDTO(boardEntity);
 
 
     }
@@ -84,27 +88,85 @@ public class BoardService {
                 BoardFileEntity boardFileEntity = BoardFileEntity.toSaveBoardFileEntity(originalFileName, storedFileName, entity);
                 boardFileRepository.save(boardFileEntity).getId();
 
+
             }
-
-return  saveId;
+            return saveId;
         }
+    }
 
+//    public boolean delete(Long id) {
+//        boardRepository.deleteById(id);
+//        Optional<BoardEntity> boardEntity = boardRepository.findById(id);
+//    if(boardEntity.isPresent()){
+//        return true;
+//    }else{
+//        return false;
+//    }
+//    }
+
+//    @Transactional
+//    public boolean passwordAxios(Long id, String memberEmail) {
+//
+//        if (memberEmail.equals(boardRepository.findById(id).get().getBoardWriter())) {
+//
+//
+//            System.out.printf("axios Ture");
+//            return true;
+//        } else {
+//            System.out.printf("false Ture");
+//            return false;
+//        }
+//    }
+
+    @Transactional
+    public BoardDTO findAllById(Long id) {
+
+        BoardEntity boardEntity = boardRepository.findById(id).get();
+        return BoardDTO.toDTO(boardEntity);
+
+
+    }
+
+    public void update(BoardDTO boardDTO) {
+
+        BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO);
+
+        boardRepository.save(boardEntity);
     }
 
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
 
-    public boolean passwordAxios(Long id, String memberEmail) {
-        BoardEntity boardEntity=boardRepository.findById(id).get();
-        System.out.printf("entity%s",boardEntity);
-    if(boardEntity.getBoardWriter().equals(memberEmail)){
-        System.out.printf("로그인정보 일치\n");
-        return true;
-    }else{
-        return false;
+//    public List<BoardDTO> search(String req, int type) {
+//
+//
+//        //type 1 == title + contents
+//        //type 2 == title
+//        //type 3 == contents
+//
+//        if (type == 1) {
+//            return toDTOList(boardRepository.findByBoardTitleContainingOrderById(req));
+//
+//        } else if( type == 2){
+//                return     toDTOList(boardRepository.findByBoardContentsContainingOrderById(req));
+//        }else if ( type == 3){
+//            return  toDTOList(boardRepository.findByBoardTitleContainingOrBoardWriterContainingOrderByIdDesc(req));
+//        }
+//
+//else {
+//    return null;
+//        }
+//
+//    }
 
-    }
+
+    public List<BoardDTO> toDTOList(List<BoardEntity> boardEntityList) {
+        List<BoardDTO> boardDTOList = new ArrayList<>();
+        for (int i = 0; i < boardEntityList.size(); i++) {
+            boardDTOList.add(BoardDTO.toDTO(boardEntityList.get(i)));
+        }
+        return boardDTOList;
     }
 }
 

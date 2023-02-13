@@ -93,9 +93,10 @@ public class MemberService {
     public Boolean login(MemberDTO memberDTO) {
         MemberEntity memberEntity = memberRepository.findByMemberEmail(memberDTO.getMemberEmail()).get();
 
+        System.out.printf("loginServiceEntity:%s",memberEntity);
         if (memberEntity.getMemberEmail().equals(memberDTO.getMemberEmail()) && memberEntity.getMemberPassword().equals(memberDTO.getMemberPassword())) {
 
-
+            System.out.printf("loginServiceTrue");
             return true;
 
         } else {

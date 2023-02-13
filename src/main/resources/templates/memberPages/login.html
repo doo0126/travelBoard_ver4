@@ -9,10 +9,12 @@
 <form  method="post" name="loginForm" id="loginForm" action="/member/login" >
     <input type="text" name="memberEmail" id="memberEmail" placeholder="이메일"><br>
     <input type="password" name="memberPassword" id="memberPassword" placeholder="비밀번호" ><br>
+
 </form>
-<samp name="loginInner" id="loginInner"></samp><br>
-<samp id="loginError"></samp><br>
 <button onclick="nullCheck()">login</button>
+<samp name="loginInner" id="loginInner"></samp><br>
+<samp id="output"></samp><br>
+
 <a href="/member/saveForm">회원가입</a>
 <button onclick="home()">home</button>
 
@@ -20,20 +22,31 @@
     const nullCheck = () =>{
         const inputEmail = document.getElementById("memberEmail");
         const inputPassword = document.getElementById("memberPassword");
-        const loginError = document.getElementById("loginError");
-        if(inputEmail.value.length == 0){
+        const output = document.getElementById("output");
+        const emailReg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        if(inputEmail.value.length == 0 ){
             inputEmail.focus();
-            loginError.innerText = "아이디 입력!";
-            loginError.style.color = "red";
-        }else if((inputPassword.value.length ==0)){
+            output.innerHTML = "이메일 확인!";
+            output.style.color = "red";
+
+
+
+        }
+        else if((inputPassword.value.length ==0)){
             inputPassword.focus();
-            loginError.innerText = "비밀번호 입력";
-            loginError.style.color="red";
+            output.innerText = "비밀번호 입력";
+            output.style.color="red";
 
-        }else if(inputEmail.value.length> 0 && inputPassword.value.length > 0){
-            console.log("로그인 호출")
+        }else if(inputEmail.value.length> 0 && inputPassword.value.length > 0 ){
+            console.log("로그인 호출");
             document.loginForm.submit();
-
+                /*test
+                *
+                *
+                *
+                *
+                *
+                * */
         }
     }
     const home = () =>{

@@ -29,6 +29,10 @@ public class BoardEntity {
     @Column(length = 30 , nullable = false)
     private  String boardWriter;
 
+   @Column(length = 30 ,  nullable = false)
+   private String boardPassword;
+
+
 
 
     @Column
@@ -41,6 +45,8 @@ public class BoardEntity {
     @OneToMany(mappedBy = "boardEntity" ,cascade = CascadeType.REMOVE , orphanRemoval = true ,fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntityList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntityList = new ArrayList<>();
 
     public static BoardEntity toSaveEntity(BoardDTO boardDTO, MemberEntity memberEntity) {
         BoardEntity boardEntity = new BoardEntity();
@@ -48,6 +54,7 @@ public class BoardEntity {
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardWriter(boardDTO.getBoardWriter());
         boardEntity.setMemberEntity(memberEntity);
+        boardEntity.setBoardPassword(boardDTO.getBoardPassword());
         boardEntity.setBoardFileAttached(0);
 
         //하위에선 상위 엔티티로 외래키 저장
@@ -66,5 +73,14 @@ public class BoardEntity {
       return boardEntity;
 
 
+    }
+    public static BoardEntity toUpdateEntity(BoardDTO boardDTO){
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setId(boardDTO.getId());
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardPassword(boardDTO.getBoardPassword());
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        return boardEntity;
     }
 }

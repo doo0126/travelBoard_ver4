@@ -69,13 +69,12 @@ public class MemberController {
 
             if(resultDTO) {
                 model.addAttribute("memberDTO", memberDTO);
-
                 session.setAttribute("memberSession", memberDTO.getMemberEmail());
-
+                System.out.printf("loginSusses");
 
                 return "index";
             }else{
-
+                System.out.printf("loginFalse");
                 return "redirect:/member/loginForm";
 
             }

@@ -10,13 +10,14 @@
     <title>boardUpdate</title>
 </head>
 <body>
-<div>
+<span>수정</span>
   <form method="post" href="/board/update">
-  <a>수정내용</a>
-    <input type="text" th:text="${boardDTO.id}" readonly/>
-  <textarea th:text="${boardDTO.boardContents}"></textarea>
-  <input type="submit" value="수정">
+    <input type="text" th:text="${boardDTO.id}" readonly/></br>
+    <input type="text" th:text="${boardDTO.boardWriter}" readonly/></br>
+    <input type="text" th:text="${boardDTO.boardTitle}">
+  <textarea th:text="${boardDTO.boardContents}"></textarea></br>
+  <input type="submit" value="수정"></br>
   </form>
-</div>
+
 </body>
 </html>

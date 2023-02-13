@@ -15,11 +15,13 @@
         </br><span id="outputTitle"></span>        </br>
         <textarea name="boardContents" id="boardContents" placeholder="내용 입력" cols="30" rows="10"></textarea>
         </br><span id="outputContents"></span>        </br>
-
+        <input type="password" id="boardPassword" class="form-control" placeholder="글 비밀번호">
         <input type="file" name="boardFile" class="form-control" multiple>
-        <input type="button" onclick="saveCheck()"value="작성">
+        </br> <span id="outputPassword"></span></br>
+
 
     </form>
+    <button onclick="saveCheck()">작성</button>
 </div>
 <script th:inline="javascript">
     const saveCheck =  () =>{
@@ -27,7 +29,8 @@
     const boardContents = document.getElementById("boardContents");
     const outputTitle = document.getElementById("outputTitle");
     const outputContents = document.getElementById("outputContents");
-
+    const outputPassword = document.getElementById("outputPassword");
+    const boardPassword = document.getElementById("boardPassword");
     console.log(boardTitle , boardContents  );
     if(boardTitle.value.length  <= 0 ){
         boardTitle.focus();
@@ -41,9 +44,14 @@
         outputContents.style.color="red";
 
 
+    }else if(boardPassword.value.length <= 0){
+        boardPassword.focus();
+        outputPassword.innerHTML ="비밀번호 필수 입력 입니다!";
+        outputPassword.style.color = "red";
+
     }
 
-    else if(boardContents.value.length>= 0 && boardTitle.value.length >=0){
+    else if(boardContents.value.length> 0 && boardTitle.value.length >0 && boardPassword.value.length >0){
         document.writeForm.submit();
 
 
